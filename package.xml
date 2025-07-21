@@ -45,7 +45,7 @@
   <run_depend>boost</run_depend>
 
   <build_depend>sophus</build_depend>
-  <build_depend>libclang-common-18-dev</build_depend>
+  <!--<build_depend>libclang-common-18-dev</build_depend> file emmintrin.h is from this package, but installing doesnot fix arm build and screws up amd64 build-->
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
