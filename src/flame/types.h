@@ -125,7 +125,7 @@ using AngleAxisd = AngleAxis<double>;
 
 /*==================== Lie group types. ====================*/
 template <typename T>
-using SE3 = Sophus::SE3Group<T>;
+using SE3 = Sophus::SE3<T>;
 
 using SE3f = SE3<float>;
 using SE3d = SE3<double>;

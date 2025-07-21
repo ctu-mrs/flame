@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
   <name>flame</name>
-  <version>1.0.0</version>
+  <version>2.0.0</version>
   <description>A lightweight method for dense online monocular depth estimation.</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag --> 
@@ -43,6 +43,8 @@
 
   <build_depend>boost</build_depend>
   <run_depend>boost</run_depend>
+
+  <build_depend>sophus</build_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

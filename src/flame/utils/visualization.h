@@ -241,7 +241,7 @@ inline void applyColorMapLine(const cv::Point2f& A, const cv::Point2f& B,
 #if CV_MAJOR_VERSION == 3 && CV_MINOR_VERSION >= 3
   FLAME_ASSERT(img->type() == cv::traits::Type<cv::Vec3b>::value);
 #else
-  FLAME_ASSERT(img->type() == cv::DataType<cv::Vec3b>::type);
+  FLAME_ASSERT(img->type() == cv::traits::Type<cv::Vec3b>::value);
 #endif
 
   cv::LineIterator it(*img, A, B);
