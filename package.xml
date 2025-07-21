@@ -45,6 +45,7 @@
   <run_depend>boost</run_depend>
 
   <build_depend>sophus</build_depend>
+  <build_depend>libclang-common-18-dev</build_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
