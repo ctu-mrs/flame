@@ -20,7 +20,12 @@
  * @date 2017-08-18 19:05:08 (Fri)
  */
 
+//#include <emmintrin.h>
+#ifdef __aarch64__
+#include <flame/external/sse2neon/sse2neon.h>
+#else
 #include <emmintrin.h>
+#endif
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
