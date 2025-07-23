@@ -281,7 +281,7 @@ bool Flame::update(double time, uint32_t img_id,
   if (feats_.size() < 3) {
     // Not enough detections.
     if (!params_.debug_quiet) {
-      fprintf(stderr, "Flame[Error]: Too few feats (%i) to triangulate!\n",
+      fprintf(stderr, "Flame[Error]: Too few feats (%li) to triangulate!\n",
               feats_.size());
     }
     // Clear everything.
@@ -543,7 +543,7 @@ bool Flame::update(double time, uint32_t img_id,
 
   stats_.tock("update");
   if (!params_.debug_quiet && params_.debug_print_timing_update) {
-    printf("Flame/update(%lu, %lu) = %4.1fms/%.1fHz (%.1fHz)\n",
+    printf("Flame/update(%u, %u) = %4.1fms/%.1fHz (%.1fHz)\n",
            num_data_updates_, num_regularizer_updates_, stats_.timings("update"),
            stats_.stats("fps_max"), stats_.stats("fps"));
   }
@@ -714,7 +714,7 @@ void Flame::detectionLoop() {
       });
 
     if (!params_.debug_quiet) {
-      printf("I HAS %i POSEFRAMES\n", detection_queue_.size());
+      printf("I HAS %li POSEFRAMES\n", detection_queue_.size());
     }
 
     while (detection_queue_.size() > 0) {
@@ -1265,7 +1265,7 @@ void Flame::detectFeatures(const Params& params,
 
   stats->tock("detection");
   if (!params.debug_quiet && params.debug_print_timing_detection) {
-    printf("Flame/detection(%i) = %f ms\n",
+    printf("Flame/detection(%li) = %f ms\n",
            features->size(), stats->timings("detection"));
   }
 
@@ -1512,7 +1512,7 @@ bool Flame::updateFeatureIDepths(const Params& params,
     if (params.debug_draw_text_overlay) {
       // Print some info.
       char buf[200];
-      snprintf(buf, sizeof(buf), "%i updates, %i fails (%i ref_patch_grad, %i, amb_match, %i max_cost)",
+      snprintf(buf, sizeof(buf), "%i updates, %li fails (%i ref_patch_grad, %i, amb_match, %i max_cost)",
                num_total_updates, feats->size() - num_total_updates,
                num_ref_patch.load(), num_amb_match.load(), num_max_cost.load());
       float font_scale = 0.6 / (640.0f / debug_img->cols);
@@ -1526,7 +1526,7 @@ bool Flame::updateFeatureIDepths(const Params& params,
 
   stats->tock("update_idepths");
   if (!params.debug_quiet && params.debug_print_timing_update_idepths) {
-    printf("Flame/update_idepths(%i) = %f ms\n",
+    printf("Flame/update_idepths(%li) = %f ms\n",
            feats->size(), stats->timings("update_idepths"));
   }
 
@@ -2064,7 +2064,7 @@ bool Flame::syncGraph(const Params& params,
   if (vtx_xy.size() < 3) {
     // Not enough detections.
     if (!params.debug_quiet) {
-      fprintf(stderr, "Flame[Error]: Too few vertices (%lu) to triangulate!\n",
+      fprintf(stderr, "Flame[Error]: Too few vertices (%u) to triangulate!\n",
               static_cast<uint32_t>(vtx_xy.size()));
     }
     return false;
@@ -2544,7 +2544,7 @@ void Flame::getVertexNormals(const Params& params,
 
   stats->tock("normals");
   if (!params.debug_quiet && params.debug_print_timing_normals) {
-    printf("Flame/normals(%i) = %f ms\n",
+    printf("Flame/normals(%li) = %f ms\n",
            vtx.size(), stats->timings("normals"));
   }
 
@@ -2632,7 +2632,7 @@ void Flame::getVertexNormals(const Params& params,
 
   stats->tock("normals");
   if (!params.debug_quiet && params.debug_print_timing_normals) {
-    printf("Flame/normals(%i) = %f ms\n",
+    printf("Flame/normals(%li) = %f ms\n",
            vtx.size(), stats->timings("normals"));
   }
 

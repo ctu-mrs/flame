@@ -82,7 +82,7 @@ int KeyFrameSelector::select(double new_time, const Image1b& new_img,
 
       bool debug_print_kf_score_info = false; // TODO(wng): Make this dynamic.
       if (debug_print_kf_score_info) {
-        printf("kf score(%i) = %f, num_kfs = %i, %i, baseline = %f\n",
+        printf("kf score(%i) = %f, num_kfs = %i, %li, baseline = %f\n",
                ii, score_ii, num_kfs_, kf_times_.size(),
                (new_pose.translation() - kf_poses_[ii].translation()).norm());
       }
