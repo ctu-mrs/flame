@@ -75,7 +75,7 @@ struct VertexData {
   cv::Point2f pos; // Position.
   float x = 0.0f; // Main primal variable.
   float w1 = 0.0f; // Plane parameters.
-  float w2 = 0.0f;;
+  float w2 = 0.0f;
 
   float x_bar = 0.0f; // Extragradient varaibles.
   float w1_bar = 0.0f;
@@ -168,7 +168,7 @@ void primalStep(const Params& params, Graph* graph);
 void extraGradientStep(const Params& params, Graph* graph);
 
 // Proximal operator for convex conjugate of NLTGV2 regularizer.
-inline float proxNLTGV2Conj(float step, float q) {
+inline float proxNLTGV2Conj(float /*step*/, float q) {
   float absq = utils::fast_abs(q);
   float new_q = q / (absq > 1 ? absq : 1);
   FLAME_ASSERT(!std::isnan(new_q));

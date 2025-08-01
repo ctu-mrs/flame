@@ -155,7 +155,7 @@ class Flame final {
   void updatePoseFramePoses(const std::vector<uint32_t>& pf_ids,
                            const std::vector<Sophus::SE3f>& pf_poses) {
     std::lock_guard<std::mutex> pfs_lock(pfs_mtx_);
-    for (int ii = 0; ii < pf_ids.size(); ++ii) {
+    for (unsigned long int ii = 0; ii < pf_ids.size(); ++ii) {
       if (pfs_.count(pf_ids[ii]) > 0) {
         pfs_[pf_ids[ii]]->pose =  pf_poses[ii];
       }
@@ -261,7 +261,7 @@ class Flame final {
     idepths_mu->clear();
     idepths_var->clear();
 
-    for (int ii = 0; ii < feats_in_curr_.size(); ++ii) {
+    for (unsigned long int ii = 0; ii < feats_in_curr_.size(); ++ii) {
       if (feats_in_curr_[ii].valid) {
         vertices->push_back(feats_in_curr_[ii].xy);
         idepths_mu->push_back(feats_in_curr_[ii].idepth_mu);

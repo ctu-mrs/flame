@@ -282,7 +282,7 @@ inline Status match(float rescale_factor,
     return Status::FAIL_AMBIGUOUS_MATCH;
   }
 
-  bool didSubpixel = false;
+  //bool didSubpixel = false;
   if (params.do_subpixel) {
     // ================== compute exact match =========================
     // compute gradients (they are actually only half the real gradient)
@@ -330,14 +330,14 @@ inline Status match(float rescale_factor,
       best_match_y -= d*incy;
       best_match_err = best_match_err - 2*d*gradPre_this -
         (gradPre_pre - gradPre_this)*d*d;
-      didSubpixel = true;
+      //didSubpixel = true;
     } else if (interpPost) {
       float d = gradPost_this / (gradPost_this - gradPost_post);
       best_match_x += d*incx;
       best_match_y += d*incy;
       best_match_err = best_match_err + 2*d*gradPost_this +
         (gradPost_post - gradPost_this)*d*d;
-      didSubpixel = true;
+      //didSubpixel = true;
     } else {
     }
   }
