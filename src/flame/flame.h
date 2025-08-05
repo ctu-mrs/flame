@@ -144,6 +144,7 @@ class Flame final {
    */
   bool update(double time, uint32_t img_id, const Sophus::SE3f& T_new,
               const Image1b& img_new, bool is_poseframe,
+              std::string& msg,
               const Image1f& idepths_true = Image1f());
 
   /**

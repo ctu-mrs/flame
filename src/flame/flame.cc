@@ -128,6 +128,7 @@ bool Flame::update(double time, uint32_t img_id,
                    const Sophus::SE3f& T_new,
                    const Image1b& img_new,
                    bool is_poseframe,
+                   std::string& msg,
                    const Image1f& idepths_true) {
   stats_.tick("update");
 
@@ -168,6 +169,8 @@ bool Flame::update(double time, uint32_t img_id,
 
   if (num_imgs_ < 2) {
     // Don't do anything until we have 2 images.
+    printf("ERROR: Won't do anything until we have 2 images.\n");
+    msg = std::string("Won't do anything until we have 2 images. (num_imgs_ < 2)");
     return false;
   }
 
@@ -200,6 +203,12 @@ bool Flame::update(double time, uint32_t img_id,
       fcmp = getPoseFrame(params_, K_, Kinv_,
                           pfs_, *curr_pf_,
                           params_.photo_error_num_pfs, &stats_);
+
+      if(fcmp == nullptr || fcmp->id == curr_pf_->id || fcmp->id < curr_pf_->id){
+        fprintf(stderr, "ERROR: Frame pointer is NULL.\n");
+        msg = std::string("Frame pointer is NULL.");
+        return false;
+      }
 
       // Make sure we don't pick the same pf.
       if (fcmp->id >= curr_pf_->id) {
@@ -251,6 +260,8 @@ bool Flame::update(double time, uint32_t img_id,
   if ((feats_.size() == 0) && (new_feats_.size() == 0)) {
     // No features to add.
     new_feats_mtx_.unlock();
+    printf("ERROR: No features to add.\n");
+    msg = std::string("No features to add.");
     return false;
   }
 
@@ -286,6 +297,8 @@ bool Flame::update(double time, uint32_t img_id,
     }
     // Clear everything.
     clear();
+    printf("ERROR: Not enough detections. (feats_.size() < 3)\n");
+    msg = std::string("Not enough detections. (feats_.size() < 3)");
     return false;
   }
 
@@ -322,6 +335,8 @@ bool Flame::update(double time, uint32_t img_id,
     if (!params_.debug_quiet) {
       fprintf(stderr, "Flame[Error]: Could not synchronize graph with features.\n");
     }
+    printf("ERROR: Not enough detections. (!sync_success)\n");
+    msg = std::string("Not enough detections. (!sync_success)");
     return false;
   }
 
@@ -358,6 +373,8 @@ bool Flame::update(double time, uint32_t img_id,
 
   if (triangles_curr_.size() == 0) {
     // No triangles.
+    printf("ERROR: No triangles.\n");
+    msg = std::string("No triangles.");
     return false;
   }
 
@@ -1919,13 +1936,22 @@ void Flame::projectGraph(const Params& params,
   }
 
   // Remove marked vertices.
-  for (auto vtx : vtx_to_remove) {
-    boost::clear_vertex(vtx, *graph); // Remove connected edges.
-    boost::remove_vertex(vtx, *graph); // Remove vertex.
+  // for (auto vtx : vtx_to_remove) {
+  //   boost::clear_vertex(vtx, *graph); // Remove connected edges.
+  //   boost::remove_vertex(vtx, *graph); // Remove vertex.
 
-    int feat_id = (*vtx_to_feat)[vtx];
-    feat_to_vtx->erase(feat_id);
-    vtx_to_feat->erase(vtx);
+  //   int feat_id = (*vtx_to_feat)[vtx];
+  //   feat_to_vtx->erase(feat_id);
+  //   vtx_to_feat->erase(vtx);
+  // }
+
+  std::unordered_set<VertexHandle>::iterator vi, vi_end, next;
+  vi = vtx_to_remove.begin();
+  vi_end = vtx_to_remove.end();
+  for (next = vi; vi != vi_end; vi = next) {
+    ++next;
+    boost::clear_vertex(*vi, *graph);
+    boost::remove_vertex(*vi, *graph);
   }
 
   stats->tock("project_graph");
@@ -2018,13 +2044,22 @@ bool Flame::syncGraph(const Params& params,
   }
 
   /*==================== Remove marked vertices ====================*/
-  for (auto vtx : vtx_to_remove) {
-    boost::clear_vertex(vtx, *graph); // Remove connected edges.
-    boost::remove_vertex(vtx, *graph); // Remove vertex.
+  // for (auto vtx : vtx_to_remove) {
+  //   boost::clear_vertex(vtx, *graph); // Remove connected edges.
+  //   boost::remove_vertex(vtx, *graph); // Remove vertex.
 
-    int feat_id = vtx_to_feat->at(vtx);
-    feat_to_vtx->erase(feat_id);
-    vtx_to_feat->erase(vtx);
+  //   int feat_id = vtx_to_feat->at(vtx);
+  //   feat_to_vtx->erase(feat_id);
+  //   vtx_to_feat->erase(vtx);
+  // }
+
+  std::unordered_set<VertexHandle>::iterator vi, vi_end, next;
+  vi = vtx_to_remove.begin();
+  vi_end = vtx_to_remove.end();
+  for (next = vi; vi != vi_end; vi = next) {
+    ++next;
+    boost::clear_vertex(*vi, *graph);
+    boost::remove_vertex(*vi, *graph);
   }
 
   /*==================== Add new vertices to graph ====================*/
@@ -2114,8 +2149,15 @@ bool Flame::syncGraph(const Params& params,
       edges_to_remove.push_back(*eit);
     }
   }
-  for (auto& edge : edges_to_remove) {
-    boost::remove_edge(edge, *graph);
+  // for (auto& edge : edges_to_remove) {
+  //   boost::remove_edge(edge, *graph);
+  // }
+  std::vector<EdgeHandle>::iterator ei, ei_end, next2;
+  ei = edges_to_remove.begin();
+  ei_end = edges_to_remove.end();
+  for (next2 = ei; ei != ei_end; ei = next2) {
+    ++next2;
+    boost::remove_edge(*ei, *graph);
   }
 
   FLAME_ASSERT(triangulator->edges().size() == boost::num_edges(*graph));
