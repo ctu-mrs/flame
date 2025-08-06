@@ -106,7 +106,7 @@ struct EdgeData {
  */
 using Graph =
     boost::adjacency_list<boost::hash_setS, // Edges will be stored in a hash map.
-                          boost::hash_setS, // Vertices will be stored in a hash map
+                          boost::listS, // Vertices will be stored in a hash map
                           boost::undirectedS, // Undirected graph
                           VertexData, // Data stored at each vertex
                           EdgeData>; // Data stored at each edge

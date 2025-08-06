@@ -204,7 +204,7 @@ bool Flame::update(double time, uint32_t img_id,
                           pfs_, *curr_pf_,
                           params_.photo_error_num_pfs, &stats_);
 
-      if(fcmp == nullptr || fcmp->id == curr_pf_->id || fcmp->id < curr_pf_->id){
+      if(fcmp == nullptr){
         fprintf(stderr, "ERROR: Frame pointer is NULL.\n");
         msg = std::string("Frame pointer is NULL.");
         return false;
@@ -1936,22 +1936,13 @@ void Flame::projectGraph(const Params& params,
   }
 
   // Remove marked vertices.
-  // for (auto vtx : vtx_to_remove) {
-  //   boost::clear_vertex(vtx, *graph); // Remove connected edges.
-  //   boost::remove_vertex(vtx, *graph); // Remove vertex.
+  for (auto vtx : vtx_to_remove) {
+    boost::clear_vertex(vtx, *graph); // Remove connected edges.
+    boost::remove_vertex(vtx, *graph); // Remove vertex.
 
-  //   int feat_id = (*vtx_to_feat)[vtx];
-  //   feat_to_vtx->erase(feat_id);
-  //   vtx_to_feat->erase(vtx);
-  // }
-
-  std::unordered_set<VertexHandle>::iterator vi, vi_end, next;
-  vi = vtx_to_remove.begin();
-  vi_end = vtx_to_remove.end();
-  for (next = vi; vi != vi_end; vi = next) {
-    ++next;
-    boost::clear_vertex(*vi, *graph);
-    boost::remove_vertex(*vi, *graph);
+    int feat_id = (*vtx_to_feat)[vtx];
+    feat_to_vtx->erase(feat_id);
+    vtx_to_feat->erase(vtx);
   }
 
   stats->tock("project_graph");
@@ -2044,22 +2035,13 @@ bool Flame::syncGraph(const Params& params,
   }
 
   /*==================== Remove marked vertices ====================*/
-  // for (auto vtx : vtx_to_remove) {
-  //   boost::clear_vertex(vtx, *graph); // Remove connected edges.
-  //   boost::remove_vertex(vtx, *graph); // Remove vertex.
+  for (auto vtx : vtx_to_remove) {
+    boost::clear_vertex(vtx, *graph); // Remove connected edges.
+    boost::remove_vertex(vtx, *graph); // Remove vertex.
 
-  //   int feat_id = vtx_to_feat->at(vtx);
-  //   feat_to_vtx->erase(feat_id);
-  //   vtx_to_feat->erase(vtx);
-  // }
-
-  std::unordered_set<VertexHandle>::iterator vi, vi_end, next;
-  vi = vtx_to_remove.begin();
-  vi_end = vtx_to_remove.end();
-  for (next = vi; vi != vi_end; vi = next) {
-    ++next;
-    boost::clear_vertex(*vi, *graph);
-    boost::remove_vertex(*vi, *graph);
+    int feat_id = vtx_to_feat->at(vtx);
+    feat_to_vtx->erase(feat_id);
+    vtx_to_feat->erase(vtx);
   }
 
   /*==================== Add new vertices to graph ====================*/
