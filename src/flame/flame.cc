@@ -153,6 +153,8 @@ bool Flame::update(double time, uint32_t img_id,
   // Remember to increment counter.
   num_imgs_++;
 
+  FLAME_ASSERT(fnew_ != nullptr);
+
   if (is_poseframe) {
     // Add to poseframes.
     pfs_mtx_.lock();
@@ -205,10 +207,16 @@ bool Flame::update(double time, uint32_t img_id,
                           params_.photo_error_num_pfs, &stats_);
 
       if(fcmp == nullptr){
-        fprintf(stderr, "ERROR: Frame pointer is NULL.\n");
-        msg = std::string("Frame pointer is NULL.");
+        printf("No suitable pose frame found.\n");
+        msg = std::string("No suitable pose frame found.");
         return false;
       }
+
+      // if(curr_pf_ == nullptr){
+      //   fprintf(stderr, "ERROR: Current frame pointer is NULL.\n");
+      //   msg = std::string("Current frame pointer is NULL.");
+      //   return false;
+      // }
 
       // Make sure we don't pick the same pf.
       if (fcmp->id >= curr_pf_->id) {
@@ -479,6 +487,12 @@ bool Flame::update(double time, uint32_t img_id,
                                                pfs_, *curr_pf_,
                                                params_.photo_error_num_pfs, &stats_);
     pfs_mtx_.unlock();
+
+    if(fcmp == nullptr){
+      printf("No suitable pose frame found.\n");
+      msg = std::string("No suitable pose frame found.");
+      return false;
+    }
 
     FLAME_ASSERT(fcmp->id != curr_pf_->id);
 

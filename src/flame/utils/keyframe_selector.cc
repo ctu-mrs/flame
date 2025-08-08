@@ -150,7 +150,7 @@ float KeyFrameSelector::score(int width, int height,
   // Apply hard check for vastly different orientations.
   float cos_angle_thresh = 0.5 * (cos(60.0f * M_PI / 180.0f) + 1);
   if (S_orientation < cos_angle_thresh) {
-    // printf("Inward normal does not align with viewing direction from reference image!\n");
+    fprintf(stderr, "Inward normal does not align with viewing direction from reference image!\n");
     return std::numeric_limits<float>::lowest();
   }
 
