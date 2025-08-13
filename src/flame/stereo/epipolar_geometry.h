@@ -29,6 +29,7 @@
 #include "flame/types.h"
 #include "flame/utils/assert.h"
 #include "flame/utils/image_utils.h"
+#include "flame/log_rate_limiter.h"
 
 namespace flame {
 
@@ -320,7 +321,10 @@ class EpipolarGeometry final {
         t_cmp_to_ref_(2)*(u_ref.y - K_(1, 2));
 
     Scalar epi_ref_norm2 = epi_ref.x * epi_ref.x + epi_ref.y * epi_ref.y;
-    FLAME_ASSERT(epi_ref_norm2 > 0);
+    if (epi_ref_norm2 <= 0) {
+      RATE_LIMITED_WARNING(1000, "WARNING: Invalid epipolar norm. This happens in the simulator when baseline between frames is numerically 0 when the drone is sitting on the gound without movement.");
+      return;
+    }
     Scalar inv_epi_ref_norm = 1.0f / sqrt(epi_ref_norm2);
     epi_ref.x *= inv_epi_ref_norm;
     epi_ref.y *= inv_epi_ref_norm;
