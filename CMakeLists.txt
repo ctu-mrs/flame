@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.8)
 
 # Configure CCache if available
 find_program(CCACHE_FOUND ccache)
@@ -20,6 +20,9 @@ if (WITH_COVERAGE)
   set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -O0 -fprofile-arcs -ftest-coverage")
   set(CMAKE_EXE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -fprofile-arcs -ftest-coverage")
 endif ()
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_DEBUG} -O3")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS_DEBUG} -O3")
 
 add_definitions("-std=c++17")
 
